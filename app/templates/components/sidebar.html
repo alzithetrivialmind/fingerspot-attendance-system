@@ -1,0 +1,53 @@
+    <!-- Sidebar -->
+    <aside class="sidebar" id="app-sidebar">
+        <div class="logo">
+            <div class="logo-badge">
+                <img src="/static/images/logo.svg" alt="" class="sidebar-logo-img">
+            </div>
+            <div class="logo-text">
+                <span class="logo-title">{{ app_name }}</span>
+            </div>
+        </div>
+
+        <!-- Jam & tanggal (dipakai semua halaman) -->
+        <div class="sidebar-clock-widget">
+            <div class="sidebar-clock-time">
+                <span class="live-pulse-dot"></span>
+                <span id="sidebar-live-time">--:--:--</span>
+            </div>
+            <div id="sidebar-live-date" class="sidebar-clock-date">
+                Memuat tanggal...
+            </div>
+        </div>
+
+        <ul class="nav-links">
+            <li class="nav-item active" onclick="switchView('dashboard')" tabindex="0" role="button" onkeydown="if(event.key === 'Enter' || event.key === ' ') { event.preventDefault(); this.click(); }">
+                <i data-lucide="layout-dashboard"></i>
+                <span>Hari ini</span>
+            </li>
+            <li class="nav-item" onclick="switchView('employees')" tabindex="0" role="button" onkeydown="if(event.key === 'Enter' || event.key === ' ') { event.preventDefault(); this.click(); }">
+                <i data-lucide="users"></i>
+                <span>Karyawan</span>
+            </li>
+            <li class="nav-item" onclick="switchView('pull-attendance')" tabindex="0" role="button" onkeydown="if(event.key === 'Enter' || event.key === ' ') { event.preventDefault(); this.click(); }">
+                <i data-lucide="database"></i>
+                <span>Data absensi</span>
+            </li>
+            <li class="nav-item" onclick="switchView('activity-log')" tabindex="0" role="button" onkeydown="if(event.key === 'Enter' || event.key === ' ') { event.preventDefault(); this.click(); }">
+                <i data-lucide="history"></i>
+                <span>Log aktivitas</span>
+            </li>
+            <li class="nav-item" onclick="window.open('/monitor', '_blank')" tabindex="0" role="button" onkeydown="if(event.key === 'Enter' || event.key === ' ') { event.preventDefault(); this.click(); }">
+                <i data-lucide="monitor"></i>
+                <span>Layar monitor</span>
+            </li>
+            <li class="nav-item" onclick="switchView('settings')" tabindex="0" role="button" onkeydown="if(event.key === 'Enter' || event.key === ' ') { event.preventDefault(); this.click(); }">
+                <i data-lucide="settings"></i>
+                <span>Pengaturan</span>
+            </li>
+        </ul>
+
+        <div class="sidebar-footer">
+            <p class="sidebar-credit"><a href="/docs" target="_blank" rel="noopener">Dokumentasi API</a></p>
+        </div>
+    </aside>

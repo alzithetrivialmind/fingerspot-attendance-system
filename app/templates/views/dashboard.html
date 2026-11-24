@@ -1,0 +1,58 @@
+        <!-- Dashboard View -->
+        <section id="dashboard-view" class="view-section active">
+            <!-- Papan kehadiran hari ini -->
+            <div class="today-board">
+                <div class="today-head">
+                    <div>
+                        <p class="today-date" id="dashboard-date-text">&nbsp;</p>
+                        <p class="today-time" id="dashboard-live-time">--:--:--</p>
+                    </div>
+                    <div class="today-actions">
+                        <button class="btn btn-secondary" onclick="exportAttendance()">Unduh Excel hari ini</button>
+                        <button class="btn btn-ghost" onclick="fetchAttendance()" title="Data juga diperbarui otomatis tiap 5 detik">Muat ulang</button>
+                    </div>
+                </div>
+
+                <div class="tally">
+                    <div class="tally-bar" role="img" id="tally-bar" aria-label="Komposisi kehadiran karyawan aktif hari ini">
+                        <span class="tally-seg tally-ontime" id="tally-ontime"></span>
+                    </div>
+                    <dl class="tally-legend">
+                        <div><dt><span class="key key-ontime"></span>Sudah scan</dt><dd id="stat-ontime-today">0</dd></div>
+                        <div><dt><span class="key key-absent"></span>Belum scan</dt><dd id="stat-absent-today">0</dd></div>
+                        <div class="tally-total"><dt>Karyawan aktif</dt><dd id="stat-total-emp">0</dd></div>
+                        <div class="tally-total"><dt>Scan hari ini</dt><dd id="stat-total-scans">0</dd></div>
+                    </dl>
+                </div>
+            </div>
+
+            <!-- Attendance Table Container -->
+            <div class="glass-panel" style="margin-top: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 1rem;">
+                    <div>
+                        <h2 class="panel-title">Scan hari ini</h2>
+                    </div>
+                    <div style="display: flex; gap: 0.75rem;">
+                        <input type="text" id="dashboard-search-input" placeholder="Cari nama atau PIN" oninput="filterDashboardTable()" class="form-control" style="min-width: 220px; padding: 0.5rem 0.85rem; font-size: 0.85rem;">
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Karyawan</th>
+                                <th>PIN</th>
+                                <th>Jam scan</th>
+                                <th>Mesin / sumber</th>
+                                <th>Status</th>
+                                <th>Verifikasi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="attendance-tbody">
+                            <tr><td colspan="6" class="loading">Memuat data absensi...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>

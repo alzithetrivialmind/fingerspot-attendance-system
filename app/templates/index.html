@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ app_name }}</title>
+    <link rel="icon" type="image/svg+xml" href="/static/images/logo.svg">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@0.469.0"></script>
+    <link rel="stylesheet" href="/static/css/style.css?v=1">
+</head>
+<body>
+    {% include 'components/login.html' %}
+
+    <!-- App Container -->
+    <div id="app-container" style="display: none;">
+        {% include 'components/sidebar.html' %}
+
+        <!-- Bar atas khusus layar kecil: tombol menu navigasi -->
+        <header class="mobile-topbar">
+            <button id="nav-toggle" class="btn btn-ghost icon-btn" aria-controls="app-sidebar" aria-expanded="false" aria-label="Buka menu" onclick="toggleNav()">
+                <i data-lucide="menu"></i>
+            </button>
+            <span class="mobile-topbar-title">{{ app_name }}</span>
+            <span class="mobile-topbar-time global-time-text"></span>
+        </header>
+        <div id="nav-backdrop" class="nav-backdrop" onclick="toggleNav(false)" hidden></div>
+        
+        <main class="main-content">
+            {% include 'views/dashboard.html' %}
+            {% include 'views/employees.html' %}
+            {% include 'views/pull_attendance.html' %}
+            {% include 'views/activity_log.html' %}
+            {% include 'views/settings.html' %}
+        </main>
+
+    </div> <!-- Close app-container -->
+
+    {% include 'components/modals.html' %}
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
+    
+    <script>window.APP_CONFIG = { timezone: {{ timezone|tojson }} };</script>
+    <script src="/static/js/api.js?v=1"></script>
+    <script src="/static/js/auth.js?v=1"></script>
+    <script src="/static/js/ui.js?v=1"></script>
+    <script src="/static/js/modules/dashboard.js?v=1"></script>
+    <script src="/static/js/modules/employees.js?v=1"></script>
+    <script src="/static/js/modules/attendance.js?v=1"></script>
+    <script src="/static/js/modules/devices.js?v=1"></script>
+    <script src="/static/js/modules/import.js?v=1"></script>
+    <script src="/static/js/modules/master_data.js?v=1"></script>
+    <script src="/static/js/modules/users.js?v=1"></script>
+    <script src="/static/js/modules/activity_log.js?v=1"></script>
+    <script src="/static/js/modules/backup.js?v=1"></script>
+    <script src="/static/js/app_init.js?v=1"></script>
+</body>
+</html>

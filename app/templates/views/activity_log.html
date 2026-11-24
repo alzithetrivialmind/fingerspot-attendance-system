@@ -1,0 +1,70 @@
+        <!-- Log Aktivitas View -->
+        <section id="activity-log-view" class="view-section">
+            <div class="page-head">
+                <div>
+                    <h1>Log aktivitas</h1>
+                    <p class="page-sub">Jejak setiap perubahan, tarikan, import, dan unduhan data: siapa yang melakukan dan kapan.</p>
+                </div>
+                <div class="page-actions">
+                    <button class="btn btn-ghost" onclick="loadActivityLogs(1)">Muat ulang</button>
+                </div>
+            </div>
+
+            <div class="glass-panel" style="margin-bottom: 1rem; padding: 1rem;">
+                <div class="filter-bar">
+                    <input type="search" id="log_filter_search" class="form-control grow" placeholder="Cari detail, nama karyawan, atau file" aria-label="Cari" onkeydown="if(event.key === 'Enter') loadActivityLogs(1)">
+                    <input type="date" id="log_filter_start" class="form-control" aria-label="Dari tanggal" title="Dari tanggal" onchange="loadActivityLogs(1)">
+                    <input type="date" id="log_filter_end" class="form-control" aria-label="Sampai tanggal" title="Sampai tanggal" onchange="loadActivityLogs(1)">
+                </div>
+                <div class="filter-bar" style="margin-top: 0.6rem;">
+                    <select id="log_filter_user" class="form-control" aria-label="Pengguna" onchange="loadActivityLogs(1)">
+                        <option value="">Semua pengguna</option>
+                    </select>
+                    <select id="log_filter_category" class="form-control" aria-label="Jenis aktivitas" onchange="loadActivityLogs(1)">
+                        <option value="">Semua aktivitas</option>
+                        <option value="karyawan">Data karyawan</option>
+                        <option value="absensi">Tarik / import scan</option>
+                        <option value="export">Unduh data</option>
+                        <option value="master">Master data</option>
+                        <option value="mesin">Mesin</option>
+                        <option value="pengguna">Pengguna</option>
+                        <option value="backup">Backup &amp; restore</option>
+                        <option value="login">Login &amp; password</option>
+                    </select>
+                    <button class="btn btn-secondary" onclick="loadActivityLogs(1)">Terapkan</button>
+                    <button class="btn btn-ghost" onclick="resetActivityLogFilters()">Reset</button>
+                </div>
+            </div>
+
+            <div class="glass-panel" style="padding: 0;">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 11rem;">Waktu</th>
+                                <th style="width: 9rem;">Pengguna</th>
+                                <th style="width: 13rem;">Aktivitas</th>
+                                <th>Detail</th>
+                            </tr>
+                        </thead>
+                        <tbody id="activity-log-tbody">
+                            <tr><td colspan="4" class="loading">Memuat log...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="pager">
+                <div id="log_pagination_info">0 aktivitas</div>
+                <div class="pager-controls">
+                    <select id="log_limit_select" onchange="loadActivityLogs(1)" class="form-control" aria-label="Baris per halaman" style="width: auto; padding: 0.4rem 0.6rem; font-size: 0.85rem;">
+                        <option value="50">50 per halaman</option>
+                        <option value="100">100 per halaman</option>
+                        <option value="200">200 per halaman</option>
+                    </select>
+                    <button id="log_prev_btn" class="btn btn-secondary btn-sm" onclick="loadActivityLogs(currentLogPage - 1)" disabled>Sebelumnya</button>
+                    <span id="log_page_display" style="font-weight: 600; color: var(--ink);">Halaman 1</span>
+                    <button id="log_next_btn" class="btn btn-secondary btn-sm" onclick="loadActivityLogs(currentLogPage + 1)" disabled>Berikutnya</button>
+                </div>
+            </div>
+        </section>

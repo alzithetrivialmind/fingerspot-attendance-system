@@ -1,0 +1,80 @@
+        <!-- Employees View -->
+        <section id="employees-view" class="view-section">
+            <div class="page-head">
+                <h1>Karyawan</h1>
+                <div class="page-actions">
+                    <button class="btn btn-secondary" onclick="exportEmployees()">Unduh Excel</button>
+                    <button class="btn btn-primary" onclick="document.getElementById('add-employee-modal').style.display='block'">Tambah karyawan</button>
+                </div>
+            </div>
+
+            <!-- Filter -->
+            <div class="glass-panel" style="margin-bottom: 1rem; padding: 1rem;">
+                <div class="filter-bar">
+                    <input type="search" id="filter_search" class="form-control grow" placeholder="Cari nama, PIN, atau NIK" aria-label="Cari karyawan" onkeydown="if(event.key === 'Enter') loadPaginatedEmployees(1)">
+                    <select id="filter_department" class="form-control" aria-label="Departemen" onchange="loadPaginatedEmployees(1)">
+                        <option value="">Semua departemen</option>
+                    </select>
+                    <select id="filter_position" class="form-control" aria-label="Jabatan" onchange="loadPaginatedEmployees(1)">
+                        <option value="">Semua jabatan</option>
+                    </select>
+                    <select id="filter_company" class="form-control" aria-label="Perusahaan" onchange="loadPaginatedEmployees(1)">
+                        <option value="">Semua perusahaan</option>
+                    </select>
+                    <button class="btn btn-secondary" onclick="loadPaginatedEmployees(1)">Terapkan</button>
+                </div>
+            </div>
+
+            <!-- Aksi massal (muncul bila ada karyawan dicentang) -->
+            <div id="bulk-action-bar" class="bulk-bar">
+                <span id="bulk-selected-badge" style="font-weight: 600; font-size: 0.9rem;">0 karyawan dipilih</span>
+                <div class="page-actions">
+                    <button class="btn btn-secondary btn-sm" onclick="executeBulkStatus(true)">Aktifkan</button>
+                    <button class="btn btn-secondary btn-sm" onclick="executeBulkStatus(false)">Nonaktifkan</button>
+                    <button class="btn btn-danger-soft btn-sm" onclick="showBulkDeleteModal()">Hapus</button>
+                    <button class="btn btn-ghost btn-sm" onclick="deselectAllEmployees()">Batal pilih</button>
+                </div>
+            </div>
+
+            <div class="glass-panel" style="padding: 0;">
+                <div class="table-container" style="overflow-x: auto; max-height: 620px; overflow-y: auto;">
+                    <table>
+                        <thead style="position: sticky; top: 0; z-index: 10;">
+                            <tr>
+                                <th style="width: 40px; text-align: center;">
+                                    <input type="checkbox" id="emp_select_all" onchange="toggleSelectAllEmployees(this)" title="Pilih semua di halaman ini" aria-label="Pilih semua di halaman ini" style="accent-color: var(--primary); width: 16px; height: 16px; cursor: pointer;">
+                                </th>
+                                <th>Nama</th>
+                                <th>PIN</th>
+                                <th>NIK</th>
+                                <th>Mulai kontrak</th>
+                                <th>Akhir kontrak</th>
+                                <th>Departemen</th>
+                                <th>Jabatan</th>
+                                <th>Perusahaan</th>
+                                <th>Status</th>
+                                <th style="text-align: right;"><span class="sr-only">Aksi</span></th>
+                            </tr>
+                        </thead>
+                        <tbody id="employees-tbody">
+                            <tr><td colspan="11" class="loading">Memuat data karyawan...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="pager">
+                <div id="emp_pagination_info">0 data</div>
+                <div class="pager-controls">
+                    <select id="emp_limit_select" onchange="loadPaginatedEmployees(1)" class="form-control" aria-label="Baris per halaman" style="width: auto; padding: 0.4rem 0.6rem; font-size: 0.85rem;">
+                        <option value="50">50 per halaman</option>
+                        <option value="100">100 per halaman</option>
+                        <option value="200">200 per halaman</option>
+                        <option value="500">500 per halaman</option>
+                    </select>
+                    <button id="emp_prev_btn" class="btn btn-secondary btn-sm" onclick="changeEmpPage(-1)" disabled>Sebelumnya</button>
+                    <span id="emp_page_display" style="font-weight: 600; color: var(--ink);">Halaman 1</span>
+                    <button id="emp_next_btn" class="btn btn-secondary btn-sm" onclick="changeEmpPage(1)" disabled>Berikutnya</button>
+                </div>
+            </div>
+        </section>

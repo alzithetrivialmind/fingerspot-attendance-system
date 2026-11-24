@@ -1,0 +1,282 @@
+        <!-- Settings View -->
+        <section id="settings-view" class="view-section">
+            <div class="page-head">
+                <h1>Pengaturan</h1>
+            </div>
+
+            <!-- Menu utama pengaturan -->
+            <div id="settings-main-menu" class="glass-panel settings-menu" style="padding: 0;">
+                <div class="settings-row" style="cursor: pointer;" onclick="toggleSettingsSubmenu('master-data-submenu')" role="button" tabindex="0" onkeydown="if(event.key === 'Enter') this.click()">
+                    <div>
+                        <h2 class="section-title">Master data</h2>
+                        <p class="section-sub">Departemen, jabatan, dan perusahaan.</p>
+                    </div>
+                    <span class="settings-chevron" aria-hidden="true"></span>
+                </div>
+                <div class="settings-row" style="cursor: pointer;" onclick="toggleSettingsSubmenu('devices-submenu')" role="button" tabindex="0" onkeydown="if(event.key === 'Enter') this.click()">
+                    <div>
+                        <h2 class="section-title">Mesin absensi</h2>
+                        <p class="section-sub">Daftar mesin, tarik atau kirim karyawan, jam mesin, restart.</p>
+                    </div>
+                    <span class="settings-chevron" aria-hidden="true"></span>
+                </div>
+                <div class="settings-row" style="cursor: pointer;" onclick="toggleSettingsSubmenu('import-data-submenu')" role="button" tabindex="0" onkeydown="if(event.key === 'Enter') this.click()">
+                    <div>
+                        <h2 class="section-title">Import data</h2>
+                        <p class="section-sub">Masukkan scan bulan-bulan lalu atau data karyawan dari file Excel / CSV.</p>
+                    </div>
+                    <span class="settings-chevron" aria-hidden="true"></span>
+                </div>
+                <div id="users-settings-card" class="settings-row" style="cursor: pointer; display: none;" onclick="toggleSettingsSubmenu('users-submenu')" role="button" tabindex="0" onkeydown="if(event.key === 'Enter') this.click()">
+                    <div>
+                        <h2 class="section-title">Pengguna</h2>
+                        <p class="section-sub">Akun yang bisa masuk ke sistem dan hak aksesnya.</p>
+                    </div>
+                    <span class="settings-chevron" aria-hidden="true"></span>
+                </div>
+                <div id="backup-settings-card" class="settings-row" style="cursor: pointer; display: none;" onclick="toggleSettingsSubmenu('backup-submenu')" role="button" tabindex="0" onkeydown="if(event.key === 'Enter') this.click()">
+                    <div>
+                        <h2 class="section-title">Backup &amp; restore</h2>
+                        <p class="section-sub">Backup database otomatis harian, mingguan, bulanan, dan pemulihan data.</p>
+                    </div>
+                    <span class="settings-chevron" aria-hidden="true"></span>
+                </div>
+            </div>
+
+            <!-- Master Data Submenu -->
+            <div id="master-data-submenu" style="display: none;">
+                <button class="btn btn-ghost back-link" onclick="toggleSettingsSubmenu('main')">Kembali ke pengaturan</button>
+                <h2 class="page-title-sm">Master data</h2>
+
+                <div class="master-grid">
+                    <div class="glass-panel">
+                        <h3 class="section-title" style="margin-bottom: 0.75rem;">Departemen</h3>
+                        <div class="inline-add">
+                            <input type="text" id="new_department_name" placeholder="Nama departemen baru" aria-label="Nama departemen baru" class="form-control" onkeydown="if(event.key === 'Enter') addMasterData('departments', 'new_department_name')">
+                            <button class="btn btn-secondary" onclick="addMasterData('departments', 'new_department_name')">Tambah</button>
+                        </div>
+                        <ul id="list_departments" class="master-list">
+                            <li class="master-empty">Memuat...</li>
+                        </ul>
+                    </div>
+
+                    <div class="glass-panel">
+                        <h3 class="section-title" style="margin-bottom: 0.75rem;">Jabatan</h3>
+                        <div class="inline-add">
+                            <input type="text" id="new_position_name" placeholder="Nama jabatan baru" aria-label="Nama jabatan baru" class="form-control" onkeydown="if(event.key === 'Enter') addMasterData('positions', 'new_position_name')">
+                            <button class="btn btn-secondary" onclick="addMasterData('positions', 'new_position_name')">Tambah</button>
+                        </div>
+                        <ul id="list_positions" class="master-list">
+                            <li class="master-empty">Memuat...</li>
+                        </ul>
+                    </div>
+
+                    <div class="glass-panel">
+                        <h3 class="section-title" style="margin-bottom: 0.75rem;">Perusahaan</h3>
+                        <div class="inline-add">
+                            <input type="text" id="new_company_name" placeholder="Nama perusahaan baru" aria-label="Nama perusahaan baru" class="form-control" onkeydown="if(event.key === 'Enter') addMasterData('companies', 'new_company_name')">
+                            <button class="btn btn-secondary" onclick="addMasterData('companies', 'new_company_name')">Tambah</button>
+                        </div>
+                        <ul id="list_companies" class="master-list">
+                            <li class="master-empty">Memuat...</li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Devices Submenu -->
+            <div id="devices-submenu" style="display: none;">
+                <button class="btn btn-ghost back-link" onclick="toggleSettingsSubmenu('main')">Kembali ke pengaturan</button>
+
+                <div class="page-head">
+                    <h2 class="page-title-sm" style="margin: 0;">Mesin absensi</h2>
+                    <button class="btn btn-primary" onclick="showAddDeviceModal()">Tambah mesin</button>
+                </div>
+
+                <!-- Progres proses mesin -->
+                <div id="sync-progress-container" class="glass-panel" style="display: none; margin-bottom: 1rem; border-color: var(--primary);" role="status" aria-live="polite">
+                    <div style="display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+                        <strong id="sync-progress-text" style="font-size: 0.9rem;">Memproses...</strong>
+                        <div style="display: flex; align-items: center; gap: 0.75rem; font-size: 0.85rem; color: var(--hull); white-space: nowrap;">
+                            <span id="sync-progress-percentage" class="num"></span>
+                            <span id="sync-progress-elapsed" class="num" title="Waktu berjalan">0:00</span>
+                            <button id="sync-progress-close" class="btn btn-secondary btn-sm" style="display: none;" onclick="jobProgress.hide()">Tutup</button>
+                        </div>
+                    </div>
+                    <div class="job-progress-track">
+                        <div id="sync-progress-bar" class="job-progress-bar"></div>
+                    </div>
+                </div>
+
+                <div class="glass-panel" style="padding: 0;">
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nama</th>
+                                    <th>Cloud ID</th>
+                                    <th>Nomor seri</th>
+                                    <th>Status</th>
+                                    <th>Sinkron karyawan</th>
+                                    <th><span class="sr-only">Aksi</span></th>
+                                </tr>
+                            </thead>
+                            <tbody id="devices-tbody">
+                                <tr><td colspan="5" class="loading">Memuat daftar mesin...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Import Data Submenu -->
+            <div id="import-data-submenu" style="display: none;">
+                <button class="btn btn-ghost back-link" onclick="toggleSettingsSubmenu('main')">Kembali ke pengaturan</button>
+                <h2 class="page-title-sm">Import data</h2>
+
+                <div class="tabs" role="tablist">
+                    <button id="tab-import-attendance" class="tab-btn active" onclick="switchImportTab('attendance')">Scan absensi</button>
+                    <button id="tab-import-employees" class="tab-btn" onclick="switchImportTab('employees')">Data karyawan</button>
+                </div>
+
+                <!-- Tab: import scan absensi -->
+                <div id="import-attendance-tab" style="display: block;">
+                    <div class="glass-panel import-panel">
+                        <p class="section-sub" style="margin-bottom: 1rem;">File export scan log dari Fingerspot (.xls, .xlsx, .csv, .txt). Scan yang sudah ada di sistem dilewati, jadi aman diimport ulang.</p>
+
+                        <div id="import-upload-area" class="drop-area" tabindex="0" role="button" aria-label="Pilih file scan absensi" onclick="document.getElementById('import_file_input').click()" onkeydown="if(event.key === 'Enter' || event.key === ' ') { event.preventDefault(); this.click(); }">
+                            <p style="font-weight: 500; margin-bottom: 0.2rem;">Pilih file</p>
+                            <p class="section-sub">.xlsx, .xls, .csv, atau .txt</p>
+                            <input type="file" id="import_file_input" accept=".xlsx, .xls, .csv, .txt" style="display: none;" onchange="handleImportFileSelect(event)">
+                        </div>
+
+                        <div id="import-selected-file" class="file-chip" style="display: none;">
+                            <div>
+                                <div id="import-filename" style="font-weight: 500;">filename.csv</div>
+                                <div id="import-filesize" class="section-sub">0 KB</div>
+                            </div>
+                            <button class="btn btn-ghost btn-sm" onclick="document.getElementById('import_file_input').click()">Ganti file</button>
+                        </div>
+
+                        <div id="import-progress-container" style="display: none; margin-bottom: 1rem;" role="status" aria-live="polite">
+                            <strong id="import-progress-text" style="display: block; font-size: 0.875rem; margin-bottom: 0.4rem;">Mengunggah dan memproses...</strong>
+                            <div class="job-progress-track">
+                                <div class="job-progress-bar is-indeterminate"></div>
+                            </div>
+                        </div>
+
+                        <div class="page-actions" style="justify-content: space-between;">
+                            <button id="btn-submit-import" class="btn btn-primary" onclick="submitImportData()" disabled>Import scan</button>
+                            <button onclick="downloadTemplate('/attendance/import/template', 'template_import_absensi.xlsx')" class="btn btn-ghost btn-sm">Unduh template</button>
+                        </div>
+
+                        <div id="import-result-message" style="margin-top: 1rem; padding: 0.85rem 1rem; border-radius: 6px; display: none;"></div>
+                    </div>
+                </div>
+
+                <!-- Tab: import data karyawan -->
+                <div id="import-employees-tab" style="display: none;">
+                    <div class="glass-panel import-panel">
+                        <p class="section-sub" style="margin-bottom: 0.75rem;">Karyawan dicocokkan berdasarkan <b>PIN</b>: PIN yang sudah ada diperbarui, PIN baru ditambahkan. Departemen, jabatan, dan perusahaan dicocokkan berdasarkan nama dan dibuat otomatis bila belum ada.</p>
+
+                        <div class="note" style="margin-bottom: 1rem;">
+                            Kolom: <b>PIN</b> (wajib), Full Name, NIK, Status, Contract Start, Contract End, Department, Position, Company.
+                        </div>
+
+                        <div id="import-emp-upload-area" class="drop-area" tabindex="0" role="button" aria-label="Pilih file data karyawan" onclick="document.getElementById('import_emp_file_input').click()" onkeydown="if(event.key === 'Enter' || event.key === ' ') { event.preventDefault(); this.click(); }">
+                            <p style="font-weight: 500; margin-bottom: 0.2rem;">Pilih file</p>
+                            <p class="section-sub">.xlsx, .xls, atau .csv</p>
+                            <input type="file" id="import_emp_file_input" accept=".xlsx,.xls,.csv" style="display: none;" onchange="handleImportEmpFileSelect(event)">
+                        </div>
+
+                        <div id="import-emp-selected-file" class="file-chip" style="display: none;">
+                            <div>
+                                <div id="import-emp-filename" style="font-weight: 500;">filename.xlsx</div>
+                                <div id="import-emp-filesize" class="section-sub">0 KB</div>
+                            </div>
+                            <button class="btn btn-ghost btn-sm" onclick="document.getElementById('import_emp_file_input').click()">Ganti file</button>
+                        </div>
+
+                        <div id="import-emp-progress-container" style="display: none; margin-bottom: 1rem;" role="status" aria-live="polite">
+                            <strong id="import-emp-progress-text" style="display: block; font-size: 0.875rem; margin-bottom: 0.4rem;">Mengunggah dan memproses...</strong>
+                            <div class="job-progress-track">
+                                <div class="job-progress-bar is-indeterminate"></div>
+                            </div>
+                        </div>
+
+                        <div class="page-actions" style="justify-content: space-between;">
+                            <button id="btn-submit-import-emp" class="btn btn-primary" onclick="submitImportEmployees()" disabled>Import karyawan</button>
+                            <button onclick="downloadTemplate('/employees/import/template', 'template_import_karyawan.xlsx')" class="btn btn-ghost btn-sm">Unduh template</button>
+                        </div>
+
+                        <div id="import-emp-result-message" style="margin-top: 1rem; padding: 0.85rem 1rem; border-radius: 6px; display: none;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Users Submenu -->
+            <div id="users-submenu" style="display: none;">
+                <button class="btn btn-ghost back-link" onclick="toggleSettingsSubmenu('main')">Kembali ke pengaturan</button>
+
+                <div class="page-head">
+                    <h2 class="page-title-sm" style="margin: 0;">Pengguna</h2>
+                    <button class="btn btn-primary" onclick="showAddUserModal()">Tambah pengguna</button>
+                </div>
+
+                <div class="glass-panel" style="padding: 0;">
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Username</th>
+                                    <th>Hak akses</th>
+                                    <th>Status</th>
+                                    <th><span class="sr-only">Aksi</span></th>
+                                </tr>
+                            </thead>
+                            <tbody id="users-tbody">
+                                <tr><td colspan="4" class="loading">Memuat pengguna...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Backup & Restore Submenu (super admin) -->
+            <div id="backup-submenu" style="display: none;">
+                <button class="btn btn-ghost back-link" onclick="toggleSettingsSubmenu('main')">Kembali ke pengaturan</button>
+
+                <div class="page-head">
+                    <div>
+                        <h2 class="page-title-sm" style="margin: 0;">Backup &amp; restore</h2>
+                        <p id="backup-status-text" class="page-sub">Memuat status backup...</p>
+                    </div>
+                    <div class="page-actions">
+                        <button class="btn btn-ghost" onclick="loadBackups()">Muat ulang</button>
+                        <button id="btn-run-backup" class="btn btn-primary" onclick="runManualBackup()">Backup sekarang</button>
+                    </div>
+                </div>
+
+                <div class="glass-panel" style="padding: 0;">
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Jenis</th>
+                                    <th>Waktu backup</th>
+                                    <th>Ukuran</th>
+                                    <th>File</th>
+                                    <th><span class="sr-only">Aksi</span></th>
+                                </tr>
+                            </thead>
+                            <tbody id="backup-tbody">
+                                <tr><td colspan="5" class="loading">Memuat backup...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <p class="section-sub" style="margin-top: 0.75rem;">Disimpan: harian 7, mingguan 5, bulanan 6, manual 10, sebelum-restore 5. Backup tertua dihapus otomatis. Salin folder backup ke tempat lain secara berkala agar aman bila server rusak.</p>
+            </div>
+
+        </section>

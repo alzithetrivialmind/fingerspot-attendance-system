@@ -1,0 +1,114 @@
+        <!-- Data Absensi (Pull Attendance) View -->
+        <section id="pull-attendance-view" class="view-section">
+            <div class="page-head">
+                <div>
+                    <h1>Data absensi</h1>
+                    <p class="page-sub">Semua scan yang tersimpan: masuk langsung dari mesin, ditarik dari cloud Fingerspot, atau diimport dari file.</p>
+                </div>
+                <div class="page-actions" id="att-scan-actions">
+                    <button class="btn btn-secondary" onclick="exportPaginatedAttendance()">Unduh Excel</button>
+                    <button class="btn btn-ghost" onclick="loadPaginatedAttendance(1)">Muat ulang</button>
+                </div>
+            </div>
+
+            <div id="att-panel-scans">
+
+            <!-- Tarik dari mesin: operasi sesekali, dilipat -->
+            <details class="glass-panel fold" style="margin-bottom: 1rem;">
+                <summary>Tarik scan dari cloud Fingerspot</summary>
+                <p class="section-sub" style="margin: 0.75rem 0 1rem;">Untuk mengisi scan yang belum masuk (mis. saat server mati). Ditarik per 2 hari; rentang panjang butuh waktu.</p>
+                <div class="filter-bar" style="margin-bottom: 1rem;">
+                    <label class="grow">
+                        <span class="field-label">Mesin</span>
+                        <select id="pull-device-select" class="form-control" style="width: 100%;">
+                            <option value="">Memuat daftar mesin...</option>
+                        </select>
+                    </label>
+                    <label>
+                        <span class="field-label">Dari tanggal</span>
+                        <input type="date" id="pull-start-date" class="form-control" style="width: 100%;">
+                    </label>
+                    <label>
+                        <span class="field-label">Sampai tanggal</span>
+                        <input type="date" id="pull-end-date" class="form-control" style="width: 100%;">
+                    </label>
+                    <button class="btn btn-primary" id="btn-pull-attendance" onclick="startMassPull()">Tarik scan</button>
+                </div>
+
+                <div id="mass-pull-progress-container" style="display: none;" role="status" aria-live="polite">
+                    <div style="display: flex; justify-content: space-between; gap: 1rem; margin-bottom: 0.4rem; font-size: 0.875rem;">
+                        <strong id="mass-pull-progress-text">Menghubungi mesin...</strong>
+                        <span id="mass-pull-progress-percentage" class="num">0%</span>
+                    </div>
+                    <div class="job-progress-track" style="margin-bottom: 0.4rem;">
+                        <div id="mass-pull-progress-bar" class="job-progress-bar"></div>
+                    </div>
+                    <div id="mass-pull-stats" class="section-sub"></div>
+                </div>
+            </details>
+
+            <div id="pull-results-panel">
+                <div class="glass-panel" style="margin-bottom: 1rem; padding: 1rem;">
+                    <div class="filter-bar">
+                        <input type="search" id="att_filter_search" class="form-control grow" placeholder="Cari nama, PIN, atau NIK" aria-label="Cari" onkeydown="if(event.key === 'Enter') loadPaginatedAttendance(1)">
+                        <input type="date" id="att_filter_start" class="form-control" aria-label="Dari tanggal" title="Dari tanggal" onchange="loadPaginatedAttendance(1)">
+                        <input type="date" id="att_filter_end" class="form-control" aria-label="Sampai tanggal" title="Sampai tanggal" onchange="loadPaginatedAttendance(1)">
+                    </div>
+                    <div class="filter-bar" style="margin-top: 0.6rem;">
+                        <select id="att_filter_dept" class="form-control" aria-label="Departemen" onchange="loadPaginatedAttendance(1)">
+                            <option value="">Semua departemen</option>
+                        </select>
+                        <select id="att_filter_pos" class="form-control" aria-label="Jabatan" onchange="loadPaginatedAttendance(1)">
+                            <option value="">Semua jabatan</option>
+                        </select>
+                        <select id="att_filter_comp" class="form-control" aria-label="Perusahaan" onchange="loadPaginatedAttendance(1)">
+                            <option value="">Semua perusahaan</option>
+                        </select>
+                        <select id="att_filter_source" class="form-control" aria-label="Sumber" onchange="loadPaginatedAttendance(1)">
+                            <option value="">Semua sumber</option>
+                            <option value="REALTIME">Langsung dari mesin</option>
+                            <option value="PULLED">Tarik dari cloud</option>
+                            <option value="IMPORTED">Import file</option>
+                        </select>
+                        <button class="btn btn-secondary" onclick="loadPaginatedAttendance(1)">Terapkan</button>
+                    </div>
+                </div>
+
+                <div class="glass-panel" style="padding: 0;">
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nama</th>
+                                    <th>PIN</th>
+                                    <th>NIK</th>
+                                    <th>Waktu scan</th>
+                                    <th>Mesin</th>
+                                    <th>Verifikasi</th>
+                                    <th>Sumber</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pull-results-tbody">
+                                <tr><td colspan="7" class="loading">Memuat data...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="pager">
+                    <div id="att_pagination_info">0 data</div>
+                    <div class="pager-controls">
+                        <select id="att_limit_select" onchange="loadPaginatedAttendance(1)" class="form-control" aria-label="Baris per halaman" style="width: auto; padding: 0.4rem 0.6rem; font-size: 0.85rem;">
+                            <option value="50">50 per halaman</option>
+                            <option value="100">100 per halaman</option>
+                            <option value="500">500 per halaman</option>
+                        </select>
+                        <button id="att_prev_btn" class="btn btn-secondary btn-sm" onclick="changeAttPage(-1)" disabled>Sebelumnya</button>
+                        <span id="att_page_display" style="font-weight: 600; color: var(--ink);">Halaman 1</span>
+                        <button id="att_next_btn" class="btn btn-secondary btn-sm" onclick="changeAttPage(1)" disabled>Berikutnya</button>
+                    </div>
+                </div>
+            </div>
+            </div>
+
+        </section>
